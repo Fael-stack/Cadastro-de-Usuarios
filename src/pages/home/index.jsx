@@ -1,21 +1,20 @@
+import { useEffect, useState } from "react";
 import "./style.css";
 import Trash from "../../assets/icons8-lixo.svg";
+import api from "../../services/api";
 
 function Home() {
-  const users = [
-    {
-      id: "0000",
-      name: "Rafael",
-      age: 17,
-      email: "rafaelguerra@gmail.com",
-    },
-    {
-      id: "0001",
-      name: "Laura",
-      age: 18,
-      email: "lauraguerra@gmail.com",
-    },
-  ];
+  const [users, setUsers] = useState([]);
+
+  async function getUsers() {
+    const usersApi = await api.get("/users");
+    setUsers(usersApi.data); 
+    console.log(usersApi.data); 
+  }
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   return (
     <div className="container">
@@ -30,9 +29,15 @@ function Home() {
       {users.map((user) => (
         <div key={user.id} className="card">
           <div>
-            <p>Name: {user.name}</p>
-            <p>Age: {user.age}</p>
-            <p>Email: {user.email}</p>
+            <p>
+              Name: <span>{user.name}</span>
+            </p>
+            <p>
+              Age: <span>{user.age}</span>
+            </p>
+            <p>
+              Email: <span>{user.email}</span>
+            </p>
           </div>
           <button>
             <img src={Trash} />
